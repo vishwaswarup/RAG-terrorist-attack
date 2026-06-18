@@ -1,0 +1,10 @@
+python-magic
+PyMuPDF
+python-docx
+easyocr
+Pillow
+pdf2image
+spacy
+dateparser
+sentence-transformers
+chromadb

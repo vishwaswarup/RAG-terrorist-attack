@@ -1,0 +1,4 @@
+storage/*.json
+storage/*.csv
+storage/vector_db/
+*.db

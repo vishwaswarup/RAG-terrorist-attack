@@ -1,0 +1,15 @@
+{
+    "date": "2015-10-03",
+    "country": "Afghanistan",
+    "state": "Kunduz",
+    "city": "Kunduz",
+    "responsible_groups": [],
+    "target_organizations": [],
+    "killed": 42,
+    "injured": 37,
+    "attack_types": [],
+    "weapon_types": [],
+    "target_types": [
+        "Civilian"
+    ]
+}

@@ -1,0 +1,21 @@
+{
+    "date": "2013-07-07",
+    "country": "India",
+    "state": "Bihar",
+    "city": "Bodh Gaya",
+    "responsible_groups": [
+        "Indian Mujahideen"
+    ],
+    "target_organizations": [],
+    "killed": 0,
+    "injured": 5,
+    "attack_types": [
+        "Bombing"
+    ],
+    "weapon_types": [
+        "Explosives"
+    ],
+    "target_types": [
+        "Religious"
+    ]
+}

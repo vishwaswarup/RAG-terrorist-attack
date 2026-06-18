@@ -1,0 +1,24 @@
+{
+    "date": "2017-01-11",
+    "country": "Afghanistan",
+    "state": "Kandahar",
+    "city": "Kandahar",
+    "responsible_groups": [
+        "Taliban"
+    ],
+    "target_organizations": [],
+    "killed": 11,
+    "injured": 16,
+    "attack_types": [
+        "Bombing",
+        "Armed Assault"
+    ],
+    "weapon_types": [
+        "Explosives",
+        "Vehicle",
+        "Firearms"
+    ],
+    "target_types": [
+        "Government"
+    ]
+}

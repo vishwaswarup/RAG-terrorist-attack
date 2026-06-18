@@ -1,0 +1,21 @@
+{
+    "date": "2009-12-22",
+    "country": "Bangladesh",
+    "state": "Dhaka",
+    "city": "Dhaka",
+    "responsible_groups": [
+        "Bangladesh Rifles"
+    ],
+    "target_organizations": [],
+    "killed": 74,
+    "injured": 50,
+    "attack_types": [
+        "Armed Assault"
+    ],
+    "weapon_types": [
+        "Firearms"
+    ],
+    "target_types": [
+        "Military"
+    ]
+}

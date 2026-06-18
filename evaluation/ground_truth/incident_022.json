@@ -1,0 +1,24 @@
+{
+    "date": "2015-07-27",
+    "country": "India",
+    "state": "Punjab",
+    "city": "Gurdaspur",
+    "responsible_groups": [
+        "Lashkar-e-Taiba"
+    ],
+    "target_organizations": [
+        "Punjab Police"
+    ],
+    "killed": 7,
+    "injured": 15,
+    "attack_types": [
+        "Armed Assault"
+    ],
+    "weapon_types": [
+        "Firearms"
+    ],
+    "target_types": [
+        "Government",
+        "Civilian"
+    ]
+}

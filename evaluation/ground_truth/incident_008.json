@@ -1,0 +1,23 @@
+{
+    "date": "2016-10-25",
+    "country": "Pakistan",
+    "state": "Balochistan",
+    "city": "Quetta",
+    "responsible_groups": [
+        "Islamic State"
+    ],
+    "target_organizations": [
+        "Police"
+    ],
+    "killed": 61,
+    "injured": 117,
+    "attack_types": [
+        "Armed Assault"
+    ],
+    "weapon_types": [
+        "Firearms"
+    ],
+    "target_types": [
+        "Government"
+    ]
+}

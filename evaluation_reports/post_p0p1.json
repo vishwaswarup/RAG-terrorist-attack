@@ -1,0 +1,732 @@
+{
+  "incidents_evaluated": 24,
+  "scalar_accuracy": {
+    "date": {
+      "correct": 24,
+      "total": 24,
+      "pct": 100.0
+    },
+    "country": {
+      "correct": 23,
+      "total": 24,
+      "pct": 95.8
+    },
+    "state": {
+      "correct": 20,
+      "total": 24,
+      "pct": 83.3
+    },
+    "city": {
+      "correct": 18,
+      "total": 24,
+      "pct": 75.0
+    },
+    "killed": {
+      "correct": 24,
+      "total": 24,
+      "pct": 100.0
+    },
+    "injured": {
+      "correct": 24,
+      "total": 24,
+      "pct": 100.0
+    }
+  },
+  "list_accuracy": {
+    "responsible_groups": {
+      "precision": 0.84,
+      "recall": 0.96,
+      "f1": 0.88,
+      "total_fp": 8,
+      "total_fn": 0
+    },
+    "target_organizations": {
+      "precision": 0.48,
+      "recall": 0.62,
+      "f1": 0.52,
+      "total_fp": 24,
+      "total_fn": 0
+    },
+    "attack_types": {
+      "precision": 0.69,
+      "recall": 0.71,
+      "f1": 0.7,
+      "total_fp": 2,
+      "total_fn": 6
+    },
+    "weapon_types": {
+      "precision": 0.81,
+      "recall": 0.81,
+      "f1": 0.81,
+      "total_fp": 1,
+      "total_fn": 6
+    },
+    "target_types": {
+      "precision": 0.55,
+      "recall": 0.62,
+      "f1": 0.58,
+      "total_fp": 8,
+      "total_fn": 10
+    }
+  },
+  "overall_scalar_accuracy": 92.4,
+  "overall_list_f1": 0.7,
+  "total_failures": 61,
+  "failures": [
+    {
+      "incident": "incident_002",
+      "field": "attack_types",
+      "expected": [
+        "Armed Assault",
+        "Bombing"
+      ],
+      "actual": [
+        "Bombing",
+        "Armed Assault",
+        "Kidnapping"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_002",
+      "field": "weapon_types",
+      "expected": [
+        "Firearms",
+        "Explosives"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 2
+    },
+    {
+      "incident": "incident_002",
+      "field": "target_types",
+      "expected": [
+        "Civilian",
+        "Transportation"
+      ],
+      "actual": [
+        "Civilian",
+        "Infrastructure"
+      ],
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "incident": "incident_003",
+      "field": "state",
+      "expected": "",
+      "actual": "Batticaloa"
+    },
+    {
+      "incident": "incident_003",
+      "field": "city",
+      "expected": "Colombo",
+      "actual": "Negombo"
+    },
+    {
+      "incident": "incident_004",
+      "field": "state",
+      "expected": "Punjab",
+      "actual": ""
+    },
+    {
+      "incident": "incident_004",
+      "field": "city",
+      "expected": "Pathankot",
+      "actual": ""
+    },
+    {
+      "incident": "incident_004",
+      "field": "target_organizations",
+      "expected": [
+        "Indian Air Force"
+      ],
+      "actual": [
+        "Indian Air Force",
+        "Security Forces"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_004",
+      "field": "attack_types",
+      "expected": [
+        "Armed Assault"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_005",
+      "field": "target_organizations",
+      "expected": [],
+      "actual": [
+        "Security Forces",
+        "Army"
+      ],
+      "fp": 2,
+      "fn": 0
+    },
+    {
+      "incident": "incident_005",
+      "field": "target_types",
+      "expected": [
+        "Civilian"
+      ],
+      "actual": [
+        "Military",
+        "Civilian"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_006",
+      "field": "country",
+      "expected": "India",
+      "actual": "Pakistan"
+    },
+    {
+      "incident": "incident_006",
+      "field": "city",
+      "expected": "Uri",
+      "actual": "Jammu"
+    },
+    {
+      "incident": "incident_007",
+      "field": "target_organizations",
+      "expected": [],
+      "actual": [
+        "crowds of Afghan civilians gathered"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_007",
+      "field": "weapon_types",
+      "expected": [
+        "Explosives"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_007",
+      "field": "target_types",
+      "expected": [
+        "Civilian",
+        "Military"
+      ],
+      "actual": [
+        "Military",
+        "Infrastructure"
+      ],
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "incident": "incident_008",
+      "field": "target_organizations",
+      "expected": [
+        "Police"
+      ],
+      "actual": [
+        "three militants stormed the",
+        "Security Forces",
+        "Police"
+      ],
+      "fp": 2,
+      "fn": 0
+    },
+    {
+      "incident": "incident_009",
+      "field": "state",
+      "expected": "",
+      "actual": "Japan"
+    },
+    {
+      "incident": "incident_009",
+      "field": "target_organizations",
+      "expected": [],
+      "actual": [
+        "Security Forces",
+        "citizens"
+      ],
+      "fp": 2,
+      "fn": 0
+    },
+    {
+      "incident": "incident_009",
+      "field": "attack_types",
+      "expected": [
+        "Armed Assault"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_009",
+      "field": "weapon_types",
+      "expected": [
+        "Firearms"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_009",
+      "field": "target_types",
+      "expected": [
+        "Civilian"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_010",
+      "field": "responsible_groups",
+      "expected": [
+        "Lashkar-e-Taiba",
+        "Jaish-e-Mohammed"
+      ],
+      "actual": [
+        "Parliament Security Service",
+        "Jaish-e-Mohammed",
+        "Lashkar-e-Taiba"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_010",
+      "field": "target_organizations",
+      "expected": [
+        "Delhi Police",
+        "CRPF"
+      ],
+      "actual": [
+        "Security Forces",
+        "Delhi Police",
+        "CRPF"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_010",
+      "field": "weapon_types",
+      "expected": [
+        "Firearms",
+        "Explosives"
+      ],
+      "actual": [
+        "Firearms"
+      ],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_011",
+      "field": "responsible_groups",
+      "expected": [
+        "Jamaat-ul-Ahrar"
+      ],
+      "actual": [
+        "Tehrik-i-Taliban Pakistan",
+        "Jamaat-ul-Ahrar"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_011",
+      "field": "target_types",
+      "expected": [
+        "Civilian"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_012",
+      "field": "attack_types",
+      "expected": [
+        "Armed Assault"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_012",
+      "field": "target_types",
+      "expected": [
+        "Military"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_013",
+      "field": "responsible_groups",
+      "expected": [
+        "Jundallah"
+      ],
+      "actual": [
+        "Tehrik-i-Taliban Pakistan",
+        "Jundallah"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_013",
+      "field": "target_types",
+      "expected": [
+        "Civilian"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_014",
+      "field": "target_organizations",
+      "expected": [],
+      "actual": [
+        "National Directorate of Security"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_014",
+      "field": "target_types",
+      "expected": [
+        "Government"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_015",
+      "field": "target_organizations",
+      "expected": [],
+      "actual": [
+        "Muslims"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_016",
+      "field": "responsible_groups",
+      "expected": [],
+      "actual": [
+        "Medecins Sans Frontieres",
+        "Taliban"
+      ],
+      "fp": 2,
+      "fn": 0
+    },
+    {
+      "incident": "incident_016",
+      "field": "target_organizations",
+      "expected": [],
+      "actual": [
+        "Air Force"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_016",
+      "field": "attack_types",
+      "expected": [],
+      "actual": [
+        "Kidnapping"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_016",
+      "field": "target_types",
+      "expected": [
+        "Civilian"
+      ],
+      "actual": [
+        "Military",
+        "Civilian"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_017",
+      "field": "city",
+      "expected": "Nagrota",
+      "actual": "Jammu"
+    },
+    {
+      "incident": "incident_017",
+      "field": "responsible_groups",
+      "expected": [
+        "Jaish-e-Mohammed"
+      ],
+      "actual": [
+        "Jaish-e-Mohammed",
+        "Nagrota"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_017",
+      "field": "target_organizations",
+      "expected": [
+        "Indian Army"
+      ],
+      "actual": [
+        "including three",
+        "Indian Army"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_017",
+      "field": "attack_types",
+      "expected": [
+        "Armed Assault"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_017",
+      "field": "weapon_types",
+      "expected": [
+        "Firearms"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_019",
+      "field": "city",
+      "expected": "Anantnag",
+      "actual": "Jammu"
+    },
+    {
+      "incident": "incident_019",
+      "field": "responsible_groups",
+      "expected": [
+        "Lashkar-e-Taiba"
+      ],
+      "actual": [
+        "Anantnag-Srinagar",
+        "Lashkar-e-Taiba"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_019",
+      "field": "target_organizations",
+      "expected": [],
+      "actual": [
+        "Security Forces"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_019",
+      "field": "attack_types",
+      "expected": [
+        "Armed Assault"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_019",
+      "field": "target_types",
+      "expected": [
+        "Religious",
+        "Civilian"
+      ],
+      "actual": [
+        "Religious",
+        "Civilian",
+        "Transportation"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_020",
+      "field": "target_types",
+      "expected": [
+        "Government"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_021",
+      "field": "target_organizations",
+      "expected": [],
+      "actual": [
+        "Pakistan Rangers",
+        "Security Forces"
+      ],
+      "fp": 2,
+      "fn": 0
+    },
+    {
+      "incident": "incident_021",
+      "field": "attack_types",
+      "expected": [
+        "Armed Assault"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_021",
+      "field": "target_types",
+      "expected": [
+        "Transportation"
+      ],
+      "actual": [
+        "Infrastructure"
+      ],
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "incident": "incident_022",
+      "field": "target_organizations",
+      "expected": [
+        "Punjab Police"
+      ],
+      "actual": [
+        "ire on the bus and then laid siege to the",
+        "officers and a superintendent of",
+        "including three Punjab",
+        "Punjab Police",
+        "Indian Army"
+      ],
+      "fp": 4,
+      "fn": 0
+    },
+    {
+      "incident": "incident_022",
+      "field": "target_types",
+      "expected": [
+        "Government",
+        "Civilian"
+      ],
+      "actual": [
+        "Military",
+        "Government",
+        "Civilian",
+        "Transportation"
+      ],
+      "fp": 2,
+      "fn": 0
+    },
+    {
+      "incident": "incident_023",
+      "field": "state",
+      "expected": "Balkh",
+      "actual": ""
+    },
+    {
+      "incident": "incident_023",
+      "field": "city",
+      "expected": "Mazar-i-Sharif",
+      "actual": "Balkh province"
+    },
+    {
+      "incident": "incident_023",
+      "field": "target_organizations",
+      "expected": [],
+      "actual": [
+        "Afghan National Police",
+        "Indian Consulate"
+      ],
+      "fp": 2,
+      "fn": 0
+    },
+    {
+      "incident": "incident_024",
+      "field": "responsible_groups",
+      "expected": [
+        "Bangladesh Rifles"
+      ],
+      "actual": [
+        "Bangladesh Rifles",
+        "Pilkhana BDR"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_025",
+      "field": "target_organizations",
+      "expected": [
+        "BSF"
+      ],
+      "actual": [
+        "Border Security Force",
+        "Security Forces",
+        "BSF"
+      ],
+      "fp": 2,
+      "fn": 0
+    },
+    {
+      "incident": "incident_025",
+      "field": "weapon_types",
+      "expected": [
+        "Firearms"
+      ],
+      "actual": [
+        "Firearms",
+        "Vehicle"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_025",
+      "field": "target_types",
+      "expected": [
+        "Military"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    }
+  ]
+}

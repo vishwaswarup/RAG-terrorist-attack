@@ -1,0 +1,22 @@
+{
+  "incidents_evaluated": 24,
+  "scalar_accuracy": {
+    "date": {"correct": 24, "total": 24, "pct": 100.0},
+    "country": {"correct": 23, "total": 24, "pct": 96.0},
+    "state": {"correct": 11, "total": 24, "pct": 46.0},
+    "city": {"correct": 17, "total": 24, "pct": 71.0},
+    "killed": {"correct": 15, "total": 24, "pct": 62.0},
+    "injured": {"correct": 14, "total": 24, "pct": 58.0}
+  },
+  "list_accuracy": {
+    "responsible_groups": {"precision": 0.70, "recall": 0.88, "f1": 0.76, "total_fp": 17, "total_fn": 2},
+    "target_organizations": {"precision": 0.39, "recall": 0.54, "f1": 0.43, "total_fp": 31, "total_fn": 0},
+    "attack_types": {"precision": 0.69, "recall": 0.71, "f1": 0.70, "total_fp": 2, "total_fn": 6},
+    "weapon_types": {"precision": 0.42, "recall": 0.34, "f1": 0.37, "total_fp": 7, "total_fn": 21},
+    "target_types": {"precision": 0.55, "recall": 0.62, "f1": 0.58, "total_fp": 8, "total_fn": 10}
+  },
+  "overall_scalar_accuracy": 72.2,
+  "overall_list_f1": 0.57,
+  "total_failures": 108,
+  "note": "Baseline metrics recorded before P0/P1 fixes. Ground truth state values were later corrected to match proper state/province names."
+}

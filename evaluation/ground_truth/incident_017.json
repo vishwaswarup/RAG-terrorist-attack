@@ -1,0 +1,23 @@
+{
+    "date": "2016-11-29",
+    "country": "India",
+    "state": "Jammu and Kashmir",
+    "city": "Nagrota",
+    "responsible_groups": [
+        "Jaish-e-Mohammed"
+    ],
+    "target_organizations": [
+        "Indian Army"
+    ],
+    "killed": 7,
+    "injured": 10,
+    "attack_types": [
+        "Armed Assault"
+    ],
+    "weapon_types": [
+        "Firearms"
+    ],
+    "target_types": [
+        "Military"
+    ]
+}

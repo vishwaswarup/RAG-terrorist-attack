@@ -1,0 +1,21 @@
+{
+    "date": "2016-03-27",
+    "country": "Pakistan",
+    "state": "Punjab",
+    "city": "Lahore",
+    "responsible_groups": [
+        "Jamaat-ul-Ahrar"
+    ],
+    "target_organizations": [],
+    "killed": 75,
+    "injured": 340,
+    "attack_types": [
+        "Bombing"
+    ],
+    "weapon_types": [
+        "Explosives"
+    ],
+    "target_types": [
+        "Civilian"
+    ]
+}

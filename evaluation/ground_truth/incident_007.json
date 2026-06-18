@@ -1,0 +1,22 @@
+{
+    "date": "2021-08-26",
+    "country": "Afghanistan",
+    "state": "Kabul",
+    "city": "Kabul",
+    "responsible_groups": [
+        "Islamic State Khorasan Province"
+    ],
+    "target_organizations": [],
+    "killed": 183,
+    "injured": 150,
+    "attack_types": [
+        "Bombing"
+    ],
+    "weapon_types": [
+        "Explosives"
+    ],
+    "target_types": [
+        "Civilian",
+        "Military"
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "date": "2014-06-08",
+    "country": "Pakistan",
+    "state": "Sindh",
+    "city": "Karachi",
+    "responsible_groups": [
+        "Tehrik-i-Taliban Pakistan"
+    ],
+    "target_organizations": [],
+    "killed": 36,
+    "injured": 18,
+    "attack_types": [
+        "Armed Assault"
+    ],
+    "weapon_types": [
+        "Firearms",
+        "Explosives"
+    ],
+    "target_types": [
+        "Transportation"
+    ]
+}

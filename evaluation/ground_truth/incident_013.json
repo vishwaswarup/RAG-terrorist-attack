@@ -1,0 +1,21 @@
+{
+    "date": "2014-11-02",
+    "country": "Pakistan",
+    "state": "Punjab",
+    "city": "Lahore",
+    "responsible_groups": [
+        "Jundallah"
+    ],
+    "target_organizations": [],
+    "killed": 60,
+    "injured": 110,
+    "attack_types": [
+        "Bombing"
+    ],
+    "weapon_types": [
+        "Explosives"
+    ],
+    "target_types": [
+        "Civilian"
+    ]
+}

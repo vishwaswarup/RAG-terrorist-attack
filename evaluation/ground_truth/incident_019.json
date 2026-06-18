@@ -1,0 +1,22 @@
+{
+    "date": "2017-07-10",
+    "country": "India",
+    "state": "Jammu and Kashmir",
+    "city": "Anantnag",
+    "responsible_groups": [
+        "Lashkar-e-Taiba"
+    ],
+    "target_organizations": [],
+    "killed": 7,
+    "injured": 19,
+    "attack_types": [
+        "Armed Assault"
+    ],
+    "weapon_types": [
+        "Firearms"
+    ],
+    "target_types": [
+        "Religious",
+        "Civilian"
+    ]
+}

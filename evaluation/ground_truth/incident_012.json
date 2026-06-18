@@ -1,0 +1,24 @@
+{
+    "date": "2017-10-03",
+    "country": "India",
+    "state": "Jammu and Kashmir",
+    "city": "Srinagar",
+    "responsible_groups": [
+        "Lashkar-e-Taiba"
+    ],
+    "target_organizations": [
+        "CRPF"
+    ],
+    "killed": 2,
+    "injured": 4,
+    "attack_types": [
+        "Armed Assault"
+    ],
+    "weapon_types": [
+        "Firearms",
+        "Explosives"
+    ],
+    "target_types": [
+        "Military"
+    ]
+}

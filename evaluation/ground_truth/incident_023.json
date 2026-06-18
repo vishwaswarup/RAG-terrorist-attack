@@ -1,0 +1,22 @@
+{
+    "date": "2018-01-04",
+    "country": "Afghanistan",
+    "state": "Balkh",
+    "city": "Mazar-i-Sharif",
+    "responsible_groups": [
+        "Taliban"
+    ],
+    "target_organizations": [],
+    "killed": 2,
+    "injured": 6,
+    "attack_types": [
+        "Bombing"
+    ],
+    "weapon_types": [
+        "Explosives",
+        "Vehicle"
+    ],
+    "target_types": [
+        "Government"
+    ]
+}

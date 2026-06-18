@@ -1,0 +1,21 @@
+{
+    "date": "2014-12-16",
+    "country": "Pakistan",
+    "state": "Khyber Pakhtunkhwa",
+    "city": "Peshawar",
+    "responsible_groups": [
+        "Tehrik-i-Taliban Pakistan"
+    ],
+    "target_organizations": [],
+    "killed": 149,
+    "injured": 114,
+    "attack_types": [
+        "Armed Assault"
+    ],
+    "weapon_types": [
+        "Firearms"
+    ],
+    "target_types": [
+        "Civilian"
+    ]
+}

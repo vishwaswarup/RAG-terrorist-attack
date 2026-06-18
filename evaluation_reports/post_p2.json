@@ -1,0 +1,438 @@
+{
+  "incidents_evaluated": 24,
+  "scalar_accuracy": {
+    "date": {
+      "correct": 24,
+      "total": 24,
+      "pct": 100.0
+    },
+    "country": {
+      "correct": 23,
+      "total": 24,
+      "pct": 95.8
+    },
+    "state": {
+      "correct": 24,
+      "total": 24,
+      "pct": 100.0
+    },
+    "city": {
+      "correct": 21,
+      "total": 24,
+      "pct": 87.5
+    },
+    "killed": {
+      "correct": 24,
+      "total": 24,
+      "pct": 100.0
+    },
+    "injured": {
+      "correct": 24,
+      "total": 24,
+      "pct": 100.0
+    }
+  },
+  "list_accuracy": {
+    "responsible_groups": {
+      "precision": 0.9,
+      "recall": 0.96,
+      "f1": 0.92,
+      "total_fp": 5,
+      "total_fn": 0
+    },
+    "target_organizations": {
+      "precision": 0.79,
+      "recall": 0.81,
+      "f1": 0.79,
+      "total_fp": 6,
+      "total_fn": 2
+    },
+    "attack_types": {
+      "precision": 0.96,
+      "recall": 0.96,
+      "f1": 0.96,
+      "total_fp": 1,
+      "total_fn": 0
+    },
+    "weapon_types": {
+      "precision": 0.92,
+      "recall": 0.88,
+      "f1": 0.89,
+      "total_fp": 0,
+      "total_fn": 4
+    },
+    "target_types": {
+      "precision": 0.75,
+      "recall": 0.94,
+      "f1": 0.82,
+      "total_fp": 12,
+      "total_fn": 2
+    }
+  },
+  "overall_scalar_accuracy": 97.2,
+  "overall_list_f1": 0.87,
+  "total_failures": 31,
+  "failures": [
+    {
+      "incident": "incident_002",
+      "field": "weapon_types",
+      "expected": [
+        "Firearms",
+        "Explosives"
+      ],
+      "actual": [
+        "Firearms"
+      ],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_002",
+      "field": "target_types",
+      "expected": [
+        "Civilian",
+        "Transportation"
+      ],
+      "actual": [
+        "Civilian",
+        "Infrastructure",
+        "Transportation"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_003",
+      "field": "city",
+      "expected": "Colombo",
+      "actual": "Negombo"
+    },
+    {
+      "incident": "incident_006",
+      "field": "country",
+      "expected": "India",
+      "actual": "Pakistan"
+    },
+    {
+      "incident": "incident_007",
+      "field": "target_types",
+      "expected": [
+        "Civilian",
+        "Military"
+      ],
+      "actual": [
+        "Military",
+        "Civilian",
+        "Transportation"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_008",
+      "field": "target_organizations",
+      "expected": [
+        "Police"
+      ],
+      "actual": [
+        "At least 61"
+      ],
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "incident": "incident_008",
+      "field": "target_types",
+      "expected": [
+        "Government"
+      ],
+      "actual": [
+        "Military",
+        "Government"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_009",
+      "field": "weapon_types",
+      "expected": [
+        "Firearms"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_010",
+      "field": "target_organizations",
+      "expected": [
+        "Delhi Police",
+        "CRPF"
+      ],
+      "actual": [
+        "CRPF"
+      ],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_010",
+      "field": "weapon_types",
+      "expected": [
+        "Firearms",
+        "Explosives"
+      ],
+      "actual": [
+        "Firearms"
+      ],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_010",
+      "field": "target_types",
+      "expected": [
+        "Government"
+      ],
+      "actual": [
+        "Government",
+        "Civilian"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_011",
+      "field": "responsible_groups",
+      "expected": [
+        "Jamaat-ul-Ahrar"
+      ],
+      "actual": [
+        "Jamaat-ul-Ahrar",
+        "Taliban",
+        "Tehrik"
+      ],
+      "fp": 2,
+      "fn": 0
+    },
+    {
+      "incident": "incident_013",
+      "field": "responsible_groups",
+      "expected": [
+        "Jundallah"
+      ],
+      "actual": [
+        "Jundallah",
+        "Taliban",
+        "Tehrik"
+      ],
+      "fp": 2,
+      "fn": 0
+    },
+    {
+      "incident": "incident_014",
+      "field": "city",
+      "expected": "Kandahar",
+      "actual": ""
+    },
+    {
+      "incident": "incident_014",
+      "field": "target_organizations",
+      "expected": [],
+      "actual": [
+        "National Directorate of Security"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_014",
+      "field": "target_types",
+      "expected": [
+        "Government"
+      ],
+      "actual": [
+        "Civilian"
+      ],
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "incident": "incident_016",
+      "field": "responsible_groups",
+      "expected": [],
+      "actual": [
+        "Taliban"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_016",
+      "field": "attack_types",
+      "expected": [],
+      "actual": [
+        "Armed Assault"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_017",
+      "field": "weapon_types",
+      "expected": [
+        "Firearms"
+      ],
+      "actual": [],
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "incident": "incident_017",
+      "field": "target_types",
+      "expected": [
+        "Military"
+      ],
+      "actual": [
+        "Military",
+        "Civilian"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_019",
+      "field": "city",
+      "expected": "Anantnag",
+      "actual": "Srinagar"
+    },
+    {
+      "incident": "incident_019",
+      "field": "target_types",
+      "expected": [
+        "Religious",
+        "Civilian"
+      ],
+      "actual": [
+        "Religious",
+        "Transportation"
+      ],
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "incident": "incident_020",
+      "field": "target_types",
+      "expected": [
+        "Government"
+      ],
+      "actual": [
+        "Government",
+        "Civilian"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_021",
+      "field": "target_organizations",
+      "expected": [],
+      "actual": [
+        "Pakistan Rangers"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_021",
+      "field": "target_types",
+      "expected": [
+        "Transportation"
+      ],
+      "actual": [
+        "Civilian",
+        "Transportation"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_022",
+      "field": "target_organizations",
+      "expected": [
+        "Punjab Police"
+      ],
+      "actual": [
+        "Punjab Police",
+        "Indian Army"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_022",
+      "field": "target_types",
+      "expected": [
+        "Government",
+        "Civilian"
+      ],
+      "actual": [
+        "Government",
+        "Civilian",
+        "Transportation"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_023",
+      "field": "target_organizations",
+      "expected": [],
+      "actual": [
+        "Afghan National Police"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_023",
+      "field": "target_types",
+      "expected": [
+        "Government"
+      ],
+      "actual": [
+        "Government",
+        "Civilian"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_024",
+      "field": "target_types",
+      "expected": [
+        "Military"
+      ],
+      "actual": [
+        "Military",
+        "Civilian"
+      ],
+      "fp": 1,
+      "fn": 0
+    },
+    {
+      "incident": "incident_025",
+      "field": "target_organizations",
+      "expected": [
+        "BSF"
+      ],
+      "actual": [
+        "Border Security Force",
+        "BSF"
+      ],
+      "fp": 1,
+      "fn": 0
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+    "date": "2019-04-21",
+    "country": "Sri Lanka",
+    "state": "",
+    "city": "Colombo",
+    "responsible_groups": [
+        "National Thowheed Jamath",
+        "Islamic State"
+    ],
+    "target_organizations": [],
+    "killed": 269,
+    "injured": 500,
+    "attack_types": [
+        "Bombing"
+    ],
+    "weapon_types": [
+        "Explosives"
+    ],
+    "target_types": [
+        "Religious",
+        "Civilian"
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "date": "2008-11-26",
+    "country": "India",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "responsible_groups": ["Lashkar-e-Taiba"],
+    "target_organizations": [],
+    "killed": 166,
+    "injured": 300,
+    "attack_types": ["Armed Assault", "Bombing"],
+    "weapon_types": ["Firearms", "Explosives"],
+    "target_types": ["Civilian", "Transportation"]
+}

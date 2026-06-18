@@ -1,0 +1,24 @@
+{
+    "date": "2020-08-02",
+    "country": "Afghanistan",
+    "state": "Nangarhar",
+    "city": "Jalalabad",
+    "responsible_groups": [
+        "Islamic State"
+    ],
+    "target_organizations": [],
+    "killed": 29,
+    "injured": 50,
+    "attack_types": [
+        "Bombing",
+        "Armed Assault"
+    ],
+    "weapon_types": [
+        "Explosives",
+        "Vehicle",
+        "Firearms"
+    ],
+    "target_types": [
+        "Government"
+    ]
+}

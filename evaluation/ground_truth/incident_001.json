@@ -1,0 +1,24 @@
+{
+    "date": "2019-02-14",
+    "country": "India",
+    "state": "Jammu and Kashmir",
+    "city": "Pulwama",
+    "responsible_groups": [
+        "Jaish-e-Mohammed"
+    ],
+    "target_organizations": [
+        "CRPF"
+    ],
+    "killed": 40,
+    "injured": 0,
+    "attack_types": [
+        "Bombing"
+    ],
+    "weapon_types": [
+        "Explosives",
+        "Vehicle"
+    ],
+    "target_types": [
+        "Military"
+    ]
+}

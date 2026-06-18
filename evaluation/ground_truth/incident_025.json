@@ -1,0 +1,23 @@
+{
+    "date": "2020-04-05",
+    "country": "India",
+    "state": "Jammu and Kashmir",
+    "city": "Handwara",
+    "responsible_groups": [
+        "Hizbul Mujahideen"
+    ],
+    "target_organizations": [
+        "BSF"
+    ],
+    "killed": 3,
+    "injured": 2,
+    "attack_types": [
+        "Armed Assault"
+    ],
+    "weapon_types": [
+        "Firearms"
+    ],
+    "target_types": [
+        "Military"
+    ]
+}
