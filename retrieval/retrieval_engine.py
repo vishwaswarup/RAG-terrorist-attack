@@ -32,9 +32,14 @@ class RetrievalEngine:
         This reduces context contamination for incident-specific queries
         while preserving breadth for analytical queries.
     """
-    def __init__(self, collection_name: str = "incidents"):
+    def __init__(self, collection_names=None):
+        if collection_names is None:
+            collection_names = ["incidents"]
+        elif isinstance(collection_names, str):
+            collection_names = [collection_names]
+            
         self.embedder = EmbeddingService()
-        self.db = ChromaManager(collection_name=collection_name)
+        self.dbs = [ChromaManager(collection_name=c) for c in collection_names]
 
     def _calculate_metadata_bonus(self, query: str, incident: Incident) -> float:
         query_lower = query.lower()
@@ -84,8 +89,8 @@ class RetrievalEngine:
     def search(self, query: str, top_k: int = DEFAULT_TOP_K,
                similarity_window: float = SIMILARITY_WINDOW) -> List[RetrievalResult]:
         """
-        Embeds the query, searches the Chroma vector database, and applies
-        similarity-window filtering to return only the most relevant subset.
+        Embeds the query, searches the active Chroma vector databases, merges candidates,
+        and applies similarity-window filtering to return only the most relevant subset.
 
         Args:
             query:              The natural-language search query.
@@ -99,12 +104,19 @@ class RetrievalEngine:
         # 1. Embed query
         query_embeddings = self.embedder.embed_queries([query])
         
-        # 2. Search ChromaDB for candidates
-        raw_results = self.db.query(query_embeddings, top_k=top_k)
+        # 2. Search all ChromaDB collections for candidates
+        all_raw_results = []
+        for db in self.dbs:
+            raw_results = db.query(query_embeddings, top_k=top_k)
+            all_raw_results.extend(raw_results)
+            
+        # Sort raw results by distance to get the global top_k before metadata scoring
+        all_raw_results.sort(key=lambda x: x[1])
+        all_raw_results = all_raw_results[:top_k]
         
         # 3. Construct RetrievalResult objects and apply metadata scoring
         candidates = []
-        for incident, score in raw_results:
+        for incident, score in all_raw_results:
             metadata_bonus = self._calculate_metadata_bonus(query, incident)
             final_score = score + metadata_bonus
             candidates.append(RetrievalResult(incident=incident, score=final_score))

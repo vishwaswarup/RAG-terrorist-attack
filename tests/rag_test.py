@@ -14,7 +14,11 @@ rag = RAGEngine(retrieval)
 query = input("\nQuery: ")
 
 
-answer = rag.query(query)
+answer, results = rag.query(query)
+
+print("\n===== RETRIEVED INCIDENTS =====")
+for r in results:
+    print(f"{r.score:.4f} - {r.incident.date} - {r.incident.city}")
 
 print("\n================ ANSWER ================\n")
 print(answer)

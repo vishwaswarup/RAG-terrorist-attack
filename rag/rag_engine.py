@@ -28,27 +28,24 @@ class RAGEngine:
         self.llm_client = LLMClient(model_name=model_name)
         self.prompt_builder = PromptBuilder(max_context_tokens=max_context_tokens)
 
-    def query(self, user_query: str, top_k: int = 10, similarity_window: float = 0.05) -> str:
+    def query(self, user_query: str, top_k: int = 10, similarity_window: float = 0.05) -> tuple[str, list]:
         """
         Executes an end-to-end RAG workflow.
+        Returns:
+            (generated_summary, list_of_retrieval_results)
         """
         logger.info(f"Executing RAG query: '{user_query}'")
         
         if is_broad_analytical_query(user_query):
             logger.info("Query classified as BROAD_ANALYTICAL_QUERY. Short-circuiting.")
-            return "Broad statistical analysis is not currently supported by the retrieval engine. Please ask about a specific group, region, attack type, or incident."
+            return "Broad statistical analysis is not currently supported by the retrieval engine. Please ask about a specific group, region, attack type, or incident.", []
         
         # 1. Retrieve
         results = self.retrieval_engine.search(user_query, top_k=top_k, similarity_window=similarity_window)
         if not results:
-            return "No relevant incidents found for the query."
+            return "No relevant incidents found for the query.", []
             
         logger.info(f"Retrieved {len(results)} relevant incidents after filtering.")
-
-        print("\n===== RETRIEVED INCIDENTS =====")
-        for r in results:
-            print(r.score)
-            print(r.incident.retrieval_text[:300])
 
         # 2. Build Prompt
         system_prompt, user_prompt = self.prompt_builder.build_prompt(user_query, results)
@@ -56,4 +53,4 @@ class RAGEngine:
         # 3. Generate
         synthesis = self.llm_client.generate(user_prompt, system_prompt=system_prompt)
         
-        return synthesis
+        return synthesis, results

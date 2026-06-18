@@ -8,3 +8,4 @@ spacy
 dateparser
 sentence-transformers
 chromadb
+streamlit
