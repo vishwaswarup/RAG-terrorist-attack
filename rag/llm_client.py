@@ -1,5 +1,6 @@
 import ollama
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -7,8 +8,8 @@ class LLMClient:
     """
     Offline interface to local Ollama.
     """
-    def __init__(self, model_name: str = "phi3:mini"):
-        self.model_name = model_name
+    def __init__(self, model_name: str = None):
+        self.model_name = model_name or os.environ.get("LLM_MODEL", "qwen3:8b")
 
     def generate(self, prompt: str, system_prompt: str = "") -> str:
         """
@@ -29,7 +30,8 @@ class LLMClient:
         options = {
             "temperature": 0.1,
             "top_p": 0.8,
-            "num_predict": 300
+            "num_predict": 300,
+            "num_ctx": 4096
         }
         
         try:

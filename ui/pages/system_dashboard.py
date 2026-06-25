@@ -1,15 +1,17 @@
 import streamlit as st
+import psutil
 import os
+import platform
 
-st.title("⚙️ System Dashboard")
+st.set_page_config(page_title="System Dashboard", page_icon="⚙️", layout="wide")
 
-st.markdown("""
-This dashboard provides a technical overview of the Offline Multimodal Intelligence Analysis System architecture and its current operational status.
-""")
+st.title("⚙️ System Status Dashboard")
+st.markdown("Monitor the offline status of DRDO Multimodal Intelligence Analysis System.")
 
-# --- Architecture Overview Diagram ---
-st.header("Architecture Overview")
-st.markdown("""
+llm_model_name = os.environ.get("LLM_MODEL", "qwen3:8b")
+
+st.markdown("### System Architecture")
+st.markdown(f"""
 ```mermaid
 graph TD
     subgraph Storage
@@ -21,7 +23,7 @@ graph TD
         OCR[Tesseract OCR]
         DocX[python-docx]
         PDF[pdfplumber]
-        LLM[Ollama phi3]
+        LLM[{llm_model_name}]
         Embedder[BAAI/bge-small-en-v1.5]
     end
     
@@ -49,7 +51,7 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     st.metric("Offline Mode Status", "✅ Active")
-    st.metric("LLM Model", "Ollama (phi3)")
+    st.metric("LLM Model", f"Ollama ({llm_model_name})")
     st.metric("Embedding Model", "BAAI/bge-small-en-v1.5")
 
 with col2:

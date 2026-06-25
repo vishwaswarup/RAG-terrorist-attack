@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 import logging
 import sys
 import os
@@ -17,7 +20,8 @@ def main():
     retrieval_engine = RetrievalEngine()
     
     # 3000 tokens * 4 chars = 12000 chars limit
-    rag_engine = RAGEngine(retrieval_engine, model_name="phi3:mini", max_context_tokens=3000)
+    model_name = os.environ.get("LLM_MODEL", "qwen3:8b")
+    rag_engine = RAGEngine(retrieval_engine, model_name=model_name, max_context_tokens=3000)
 
     queries = [
         "Summarize the attack patterns used by JeM in Kashmir based on the retrieved incidents.",

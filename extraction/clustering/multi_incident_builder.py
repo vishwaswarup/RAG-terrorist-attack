@@ -2,7 +2,27 @@
 Multi-Incident Builder
 ======================
 Takes a raw document, splits it into sentences, extracts features per sentence,
-clusters them, and returns a list of populated Incident objects.
+filters through the Event Detector, clusters event-bearing sentences,
+builds incidents, and deduplicates the results.
+
+Pipeline:
+    Document
+        ↓
+    Sentence Splitting
+        ↓
+    Feature Extraction (per sentence)
+        ↓
+    Event Detection (filter administrative content)
+        ↓
+    Boundary-Aware Context Propagation
+        ↓
+    Clustering (event sentences only)
+        ↓
+    Incident Construction
+        ↓
+    Incident Deduplication
+        ↓
+    Final Incidents
 """
 
 import uuid
@@ -21,6 +41,8 @@ from extraction.attack_extractor import (
     extract_weapon_types,
     extract_target_types,
 )
+from extraction.event_detector import detect_event
+from extraction.incident_deduplicator import deduplicate_incidents
 
 from .models import SentenceEvent, EventCluster
 from .anchor_detector import is_anchor_sentence, has_narrative_boundary
@@ -73,6 +95,13 @@ def build_multi_incidents(document: Document) -> List[Incident]:
         )
         raw_events.append(event)
         
+    # PASS 1.5: Event Detection — classify each sentence
+    for event in raw_events:
+        detection = detect_event(event.text)
+        event.event_classification = detection.classification
+        event.event_score = detection.event_score
+        event.admin_score = detection.admin_score
+        
     # PASS 2: Boundary-Aware Context Window for Dates and Locations
     # We look at idx-1 and idx+1. If we lack a date/location, we can borrow it
     # IF there is no boundary between us and the neighbor.
@@ -87,6 +116,9 @@ def build_multi_incidents(document: Document) -> List[Incident]:
             return True
         # Explicit location mismatch
         if e1.city and e2.city and e1.city != e2.city:
+            return True
+        # Event classification boundary: don't borrow across REJECT boundaries
+        if e1.event_classification == "REJECT" or e2.event_classification == "REJECT":
             return True
         return False
 
@@ -111,7 +143,7 @@ def build_multi_incidents(document: Document) -> List[Incident]:
                 curr.state = raw_events[i+1].state
                 curr.country = raw_events[i+1].country
                 
-    # 3. Clustering
+    # 3. Clustering (Event Detector classification is respected inside cluster_events)
     clusters = cluster_events(raw_events)
     
     incidents: List[Incident] = []
@@ -190,5 +222,31 @@ def build_multi_incidents(document: Document) -> List[Incident]:
         incident.retrieval_text = generate_retrieval_text(incident)
         
         incidents.append(incident)
+    
+    # 4.5 Document-Level Entity Enrichment
+    # Responsible groups and target organizations are often mentioned in
+    # administrative/context sentences (e.g. charge-sheet paragraphs) that
+    # the Event Detector correctly classifies as REJECT. We extract these
+    # entities from the FULL document text and enrich incidents that are
+    # missing this information.
+    if incidents:
+        doc_orgs = extract_organizations(document.raw_text)
+        doc_resp_groups = doc_orgs["responsible_groups"]
+        doc_target_orgs = doc_orgs["target_organizations"]
+        
+        for incident in incidents:
+            # Enrich responsible groups if missing
+            if not incident.responsible_groups and doc_resp_groups:
+                incident.responsible_groups = doc_resp_groups
+            
+            # Enrich target organizations if missing
+            if not incident.target_organizations and doc_target_orgs:
+                incident.target_organizations = doc_target_orgs
+            
+            # Regenerate retrieval text after enrichment
+            incident.retrieval_text = generate_retrieval_text(incident)
+    
+    # 5. Incident Deduplication
+    incidents = deduplicate_incidents(incidents)
         
     return incidents

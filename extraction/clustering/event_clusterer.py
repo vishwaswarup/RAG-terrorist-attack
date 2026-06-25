@@ -169,11 +169,20 @@ def calculate_similarity(s1: SentenceEvent, cluster: EventCluster) -> float:
 def cluster_events(sentences: List[SentenceEvent], threshold: float = CLUSTER_THRESHOLD) -> List[EventCluster]:
     """
     Groups SentenceEvents into Incident Clusters.
+    
+    Respects event_classification from the Event Detector:
+      - REJECT sentences are excluded entirely (administrative/legal content)
+      - ACCEPT sentences can seed new clusters
+      - NEUTRAL sentences can only join existing clusters
     """
     clusters: List[EventCluster] = []
     cluster_counter = 0
     
     for sent in sentences:
+        # Skip REJECT sentences entirely — they are administrative content
+        if sent.event_classification == "REJECT":
+            continue
+            
         best_score = -1.0
         best_cluster = None
         
@@ -189,12 +198,18 @@ def cluster_events(sentences: List[SentenceEvent], threshold: float = CLUSTER_TH
             sent.cluster_id = best_cluster.cluster_id
             best_cluster.supporting_sentences.append(sent)
         else:
-            # If no strong match, and it's an anchor (or has enough entities to be promoted), create a new cluster
-            if sent.is_anchor or sent.attack_types or sent.weapon_types or sent.killed > 0 or sent.injured > 0:
+            # Only ACCEPT sentences can seed new clusters
+            # NEUTRAL sentences without a cluster match are simply dropped
+            can_promote = (sent.event_classification == "ACCEPT")
+            has_event_signal = (sent.is_anchor or sent.attack_types or 
+                              sent.weapon_types or sent.killed > 0 or sent.injured > 0)
+            
+            if can_promote and has_event_signal:
                 cluster_counter += 1
-                sent.is_anchor = True # promote
+                sent.is_anchor = True  # promote
                 sent.cluster_id = cluster_counter
                 new_cluster = EventCluster(cluster_id=cluster_counter, anchor_sentence=sent)
                 clusters.append(new_cluster)
 
     return clusters
+

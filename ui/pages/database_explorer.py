@@ -56,14 +56,17 @@ try:
         
         # Iterate through the rows for detailed view
         for index, row in df.iterrows():
-            header_title = f"{row.get('date', 'Unknown Date')} - {row.get('city', 'Unknown City')}, {row.get('state', 'Unknown State')}"
+            header_title = f"{row.get('date', 'Unknown Date')} | {row.get('city', 'Unknown City')}, {row.get('state', 'Unknown State')}"
             with st.expander(header_title):
-                st.markdown(f"**Responsible Groups:** {row.get('responsible_groups', 'Unknown')}")
-                st.markdown(f"**Attack Types:** {row.get('attack_types', 'Unknown')}")
-                st.markdown(f"**Casualties:** Killed: {row.get('killed', 0)} | Injured: {row.get('injured', 0)}")
-                if 'has_summary' in row and bool(row['has_summary']):
-                    st.markdown("**Summary:** (Available via Retrieval Text)")
-                
+                colA, colB = st.columns(2)
+                with colA:
+                    st.markdown(f"**Date:** {row.get('date', 'Unknown Date')}")
+                    st.markdown(f"**Location:** {row.get('city', 'Unknown')}, {row.get('state', 'Unknown')}")
+                    st.markdown(f"**Attack Types:** {row.get('attack_types', 'Unknown')}")
+                with colB:
+                    st.markdown(f"**Responsible Groups:** {row.get('responsible_groups', 'Unknown')}")
+                    st.markdown(f"**Casualties:** Killed: {row.get('killed', 0)} | Injured: {row.get('injured', 0)}")
+
                 if 'retrieval_text' in row:
                     st.markdown("**Retrieval Text (Vector Payload):**")
                     st.code(row['retrieval_text'], language='text')

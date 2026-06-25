@@ -1,3 +1,4 @@
+import os
 import logging
 import re
 from retrieval.retrieval_engine import RetrievalEngine
@@ -7,12 +8,12 @@ from .prompt_builder import PromptBuilder
 logger = logging.getLogger(__name__)
 
 BROAD_ANALYTICAL_INDICATORS = [
-    "compare", "comparison", "versus", "vs", "difference between",
     "most common", "top", "trend", "trends", "across india", 
     "nationwide", "statistics", "statistical", "frequency", "distribution"
 ]
 
 def is_broad_analytical_query(query: str) -> bool:
+    """Only short-circuit truly un-retrievable statistical/aggregate queries."""
     q_lower = query.lower()
     for indicator in BROAD_ANALYTICAL_INDICATORS:
         if re.search(r'\b' + re.escape(indicator) + r'\b', q_lower):
@@ -23,9 +24,9 @@ class RAGEngine:
     """
     Orchestrates Retrieval and LLM Generation.
     """
-    def __init__(self, retrieval_engine: RetrievalEngine, model_name: str = "phi3:mini", max_context_tokens: int = 3000):
+    def __init__(self, retrieval_engine: RetrievalEngine, model_name: str = None, max_context_tokens: int = 3000):
         self.retrieval_engine = retrieval_engine
-        self.llm_client = LLMClient(model_name=model_name)
+        self.llm_client = LLMClient(model_name=model_name or os.environ.get("LLM_MODEL", "qwen3:8b"))
         self.prompt_builder = PromptBuilder(max_context_tokens=max_context_tokens)
 
     def query(self, user_query: str, top_k: int = 10, similarity_window: float = 0.05) -> tuple[str, list]:

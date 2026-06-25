@@ -55,16 +55,19 @@ if uploaded_file is not None:
                 st.stop()
                 
             st.write("✓ File Classified & Text Extracted")
+            if doc.metadata.get("image_embedding"):
+                st.write("✓ Visual Embedding Generated (OpenCLIP)")
             st.write("✓ Document Object Created")
+            st.write(f"Debug: source_type={doc.source_type}, extractor={doc.metadata.get('extractor')}")
             st.session_state.document_text = doc.raw_text
+            st.session_state.document_obj = doc
             
-            # 2. Process Document (Extract incidents + Store in SQLite)
-            st.write("⚙ Extracting intelligence incidents...")
+            # 2. Process Document (Extract incidents or Image Asset)
+            st.write("⚙ Extracting intelligence objects...")
             incidents = process_document(doc)
             st.session_state.extracted_incidents = incidents
             
-            st.write("✓ Incidents Extracted")
-            st.write("✓ Stored locally in SQLite")
+            st.write("✓ Extraction Complete")
             
             status.update(label="Extraction Complete!", state="complete", expanded=False)
             st.session_state.extraction_complete = True
@@ -72,28 +75,46 @@ if uploaded_file is not None:
 if st.session_state.extraction_complete and st.session_state.extracted_incidents is not None:
     incidents = st.session_state.extracted_incidents
     
-    st.success(f"Successfully extracted **{len(incidents)}** incident(s).")
+    from models.image_asset import ImageAsset
+    incidents_only = [inc for inc in incidents if not isinstance(inc, ImageAsset)]
+    assets_only = [inc for inc in incidents if isinstance(inc, ImageAsset)]
+    
+    if assets_only and incidents_only:
+        st.success(f"Successfully processed 1 image asset and extracted **{len(incidents_only)}** incident(s).")
+    elif assets_only:
+        st.success("Successfully processed image asset.")
+    else:
+        st.success(f"Successfully extracted **{len(incidents_only)}** incident(s).")
     
     with st.expander("Show Extracted Raw Text"):
         st.code(st.session_state.document_text, language="text")
-    
-    st.markdown("### Extracted Incidents")
+        
+    st.markdown("### Extracted Intelligence")
     for i, inc in enumerate(incidents):
-        with st.container(border=True):
-            st.markdown(f"**Incident #{i+1}**")
-            col1, col2 = st.columns(2)
-            with col1:
-                st.markdown(f"**Date:** {inc.date or 'Unknown'}")
-                st.markdown(f"**Location:** {inc.city or 'Unknown'}, {inc.state or 'Unknown'}, {inc.country or 'Unknown'}")
-                st.markdown(f"**Attack Types:** {', '.join(inc.attack_types) if inc.attack_types else 'Unknown'}")
-                st.markdown(f"**Target Types:** {', '.join(inc.target_types) if inc.target_types else 'Unknown'}")
-            with col2:
-                st.markdown(f"**Weapon Types:** {', '.join(inc.weapon_types) if inc.weapon_types else 'Unknown'}")
-                st.markdown(f"**Responsible Groups:** {', '.join(inc.responsible_groups) if inc.responsible_groups else 'Unknown'}")
-                st.markdown(f"**Killed:** {inc.killed} | **Injured:** {inc.injured}")
-            
-            st.markdown("**Summary:**")
-            st.info(inc.summary)
+        if isinstance(inc, ImageAsset):
+            with st.container(border=True):
+                st.markdown(f"**Image Asset Created**")
+                st.markdown(f"**Filename:** {inc.filename}")
+                st.markdown("**Generated Caption:**")
+                st.info(inc.caption)
+                st.markdown("**OCR Text:**")
+                st.markdown(inc.ocr_text if inc.ocr_text else "*(No text detected)*")
+        else:
+            with st.container(border=True):
+                st.markdown(f"**Incident #{i+1}**")
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.markdown(f"**Date:** {inc.date or 'Unknown'}")
+                    st.markdown(f"**Location:** {inc.city or 'Unknown'}, {inc.state or 'Unknown'}, {inc.country or 'Unknown'}")
+                    st.markdown(f"**Attack Types:** {', '.join(inc.attack_types) if inc.attack_types else 'Unknown'}")
+                    st.markdown(f"**Target Types:** {', '.join(inc.target_types) if inc.target_types else 'Unknown'}")
+                with col2:
+                    st.markdown(f"**Responsible Groups:** {', '.join(inc.responsible_groups) if inc.responsible_groups else 'Unknown'}")
+                    st.markdown(f"**Weapon Types:** {', '.join(inc.weapon_types) if inc.weapon_types else 'Unknown'}")
+                    st.markdown(f"**Casualties:** Killed: {inc.killed} | Injured: {inc.injured}")
+                
+                st.markdown("**Summary:**")
+                st.info(inc.summary)
             
     st.markdown("---")
     
@@ -114,10 +135,22 @@ if st.session_state.extraction_complete and st.session_state.extracted_incidents
         st.markdown("#### Store to Knowledge Base")
         if st.button("Confirm Storage", type="primary"):
             with st.spinner("Embedding and storing in ChromaDB..."):
-                documents = [inc.retrieval_text for inc in incidents]
-                embeddings = embedder.embed_documents(documents)
-                db.add_incidents(incidents, embeddings)
-                st.success(f"Successfully added {len(incidents)} incidents to the 'uploaded_incidents' collection in ChromaDB!")
+                incidents_only = [inc for inc in incidents if not isinstance(inc, ImageAsset)]
+                assets_only = [inc for inc in incidents if isinstance(inc, ImageAsset)]
+                
+                if incidents_only:
+                    documents = [inc.retrieval_text for inc in incidents_only]
+                    embeddings = embedder.embed_documents(documents)
+                    db.add_incidents(incidents_only, embeddings)
+                
+                if assets_only:
+                    for asset in assets_only:
+                        # Create text embedding for the asset's retrieval text
+                        text_emb = embedder.embed_documents([asset.retrieval_text])[0]
+                        # Assume image embedding is already in the asset from ingestion
+                        db.add_image_asset(asset, text_emb, asset.image_embedding)
+                
+                st.success("Successfully added to Knowledge Base!")
                 st.balloons()
                 
                 # Reset state after successful storage
@@ -165,9 +198,12 @@ if st.session_state.extraction_complete and st.session_state.extracted_incidents
                 
                 candidates = []
                 for i, sim in enumerate(sims):
-                    candidates.append(RetrievalResult(incident=self.incidents[i], score=float(sim)))
+                    candidates.append(RetrievalResult(payload=self.incidents[i], score=float(sim)))
                     
                 candidates.sort(key=lambda x: x.score, reverse=True)
+                
+                # Apply absolute threshold to avoid returning completely irrelevant garbage
+                candidates = [c for c in candidates if c.score > 0.25]
                 candidates = candidates[:top_k]
                 
                 if similarity_window is not None and candidates:
@@ -178,9 +214,8 @@ if st.session_state.extraction_complete and st.session_state.extracted_incidents
 
         # Determine which RAGEngine to use based on scope
         if retrieval_scope == "Uploaded Document Only":
-            if "temp_rag_engine" not in st.session_state:
-                temp_retrieval = InMemoryRetrievalEngine(incidents, embedder)
-                st.session_state.temp_rag_engine = RAGEngine(temp_retrieval)
+            temp_retrieval = InMemoryRetrievalEngine(incidents, embedder)
+            st.session_state.temp_rag_engine = RAGEngine(temp_retrieval)
             active_rag = st.session_state.temp_rag_engine
         elif retrieval_scope == "Historical GTD Only":
             if "gtd_rag_engine" not in st.session_state:
@@ -193,58 +228,67 @@ if st.session_state.extraction_complete and st.session_state.extracted_incidents
 
         st.markdown("---")
         
-        # Dedicated "Find Similar Historical Incidents" Button
-        if st.button("🌟 Find Similar Historical Incidents", use_container_width=True):
-            with st.spinner("Searching GTD for similar historical events..."):
-                if "gtd_rag_engine" not in st.session_state:
-                    st.session_state.gtd_rag_engine = RAGEngine(RetrievalEngine(collection_names=["incidents"]))
+        def set_query(q):
+            st.session_state.temp_query = q
+
+        temp_query = st.text_input("Enter your custom query:", key="temp_query", placeholder="e.g. Summarize this report")
+        
+        st.markdown("<small><b>💡 Example Queries:</b></small>", unsafe_allow_html=True)
+        qcols = st.columns(4)
+        qcols[0].button("Summarize this report", use_container_width=True, on_click=set_query, args=("Summarize this report",))
+        qcols[1].button("Who was targeted?", use_container_width=True, on_click=set_query, args=("Who was targeted?",))
+        qcols[2].button("What attack type was used?", use_container_width=True, on_click=set_query, args=("What attack type was used?",))
+        qcols[3].button("What casualties were reported?", use_container_width=True, on_click=set_query, args=("What casualties were reported?",))
+
+        if st.button("Analyze Document", type="primary", use_container_width=True):
+            if temp_query.strip():
+                with st.status("Analyzing Intelligence...", expanded=True) as status:
+                    st.write(f"🔍 Understanding query (Scope: {retrieval_scope})...")
+                    import time
+                    time.sleep(0.2)
+                    st.write("📚 Searching document context...")
+                    time.sleep(0.2)
+                    st.write("📊 Ranking incidents...")
+                    start_time = time.time()
+                    answer, results = active_rag.query(temp_query)
+                    st.write("📝 Generating response...")
+                    elapsed = time.time() - start_time
+                    status.update(label="Analysis Complete!", state="complete", expanded=False)
+                    
+                st.success("✅ Document Analysis completed successfully!")
                 
-                query_text = "\n\n".join([inc.retrieval_text for inc in incidents])
-                analysis_prompt = f"Find and generate a concise summary explaining historical events similar to this incident:\n\n{query_text}"
+                # Query Summary Card
+                with st.container(border=True):
+                    col1, col2, col3 = st.columns(3)
+                    col1.metric("Query", temp_query[:25] + "..." if len(temp_query) > 25 else temp_query)
+                    col2.metric("Incidents Retrieved", len(results))
+                    col3.metric("Response Time", f"{elapsed:.2f}s")
                 
-                answer, results = st.session_state.gtd_rag_engine.query(analysis_prompt)
-                st.markdown("### Similar Historical Incidents Analysis")
+                st.markdown("### Document Analysis Report")
                 st.info(answer)
                 
                 if results:
-                    with st.expander("Show Retrieved Historical Incidents"):
-                        for res in results:
-                            st.markdown(f"**Date:** {res.incident.date} | **Location:** {res.incident.city}, {res.incident.state}")
-                            st.write(res.incident.summary)
-                            st.markdown("---")
-        
-        st.markdown("---")
-        
-        # Query UI
-        temp_query = st.text_input("Enter your custom query:", key="temp_query", placeholder="e.g. Summarize this report")
-        
-        st.markdown("<small><b>Examples:</b></small>", unsafe_allow_html=True)
-        qcols = st.columns(4)
-        if qcols[0].button("Summarize this report"):
-            st.session_state.temp_query = "Summarize this report"
-            st.rerun()
-        if qcols[1].button("Who was targeted?"):
-            st.session_state.temp_query = "Who was targeted?"
-            st.rerun()
-        if qcols[2].button("What attack type was used?"):
-            st.session_state.temp_query = "What attack type was used?"
-            st.rerun()
-        if qcols[3].button("What casualties were reported?"):
-            st.session_state.temp_query = "What casualties were reported?"
-            st.rerun()
-
-        if st.button("Analyze Document", type="primary"):
-            if temp_query.strip():
-                with st.spinner(f"Analyzing using scope: {retrieval_scope}..."):
-                    answer, results = active_rag.query(temp_query)
-                    st.markdown("### Document Analysis")
-                    st.info(answer)
-                    
-                    if results and retrieval_scope != "Uploaded Document Only":
-                        with st.expander("Show Retrieved Incidents"):
-                            for res in results:
-                                st.markdown(f"**Date:** {res.incident.date} | **Location:** {res.incident.city}, {res.incident.state}")
-                                st.write(res.incident.summary)
-                                st.markdown("---")
+                    st.markdown("### Retrieved Data")
+                    from models.image_asset import ImageAsset
+                    for res in results:
+                        if isinstance(res.payload, ImageAsset):
+                            with st.expander(f"Image Asset: {res.payload.filename} (Score: {res.score:.2f})"):
+                                st.write(f"**Caption:** {res.payload.caption}")
+                        else:
+                            inc = res.payload
+                            score_badge = f"High Match ({res.score:.2f})" if res.score > 0.8 else f"Match ({res.score:.2f})"
+                            with st.expander(f"{inc.date or 'Unknown'} | {inc.city or 'Unknown'}, {inc.state or 'Unknown'} | {score_badge}"):
+                                colA, colB = st.columns(2)
+                                with colA:
+                                    st.markdown(f"**Date:** {inc.date or 'Unknown'}")
+                                    st.markdown(f"**Location:** {inc.city or 'Unknown'}, {inc.state or 'Unknown'}, {inc.country or 'Unknown'}")
+                                    st.markdown(f"**Attack Type:** {', '.join(inc.attack_types) if inc.attack_types else 'Unknown'}")
+                                with colB:
+                                    st.markdown(f"**Responsible Group:** {', '.join(inc.responsible_groups) if inc.responsible_groups else 'Unknown'}")
+                                    st.markdown(f"**Weapon Type:** {', '.join(inc.weapon_types) if inc.weapon_types else 'Unknown'}")
+                                    st.markdown(f"**Similarity Score:** {res.score:.4f}")
+                                
+                                st.markdown("**Summary:**")
+                                st.info(inc.summary)
             else:
                 st.warning("Please enter a query.")

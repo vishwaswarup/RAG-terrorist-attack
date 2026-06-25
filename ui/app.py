@@ -1,5 +1,9 @@
 import streamlit as st
 import os
+from dotenv import load_dotenv
+
+# Load environment variables (e.g. LLM_MODEL)
+load_dotenv()
 
 st.set_page_config(
     page_title="Intelligence Analysis System",

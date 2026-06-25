@@ -17,6 +17,9 @@ class SentenceEvent:
     injured: int = 0
     is_anchor: bool = False
     cluster_id: Optional[int] = None
+    event_classification: str = "NEUTRAL"  # ACCEPT, REJECT, or NEUTRAL
+    event_score: float = 0.0
+    admin_score: float = 0.0
 
 @dataclass
 class EventCluster:

@@ -1,7 +1,8 @@
 python-magic
 PyMuPDF
 python-docx
-easyocr
+paddlepaddle>=2.6.1
+paddleocr>=2.7.3
 Pillow
 pdf2image
 spacy
@@ -9,3 +10,5 @@ dateparser
 sentence-transformers
 chromadb
 streamlit
+open_clip_torch
+Pillowpython-dotenv

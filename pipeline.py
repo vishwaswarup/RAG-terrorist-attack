@@ -129,6 +129,10 @@ def ingest(file_path: str) -> Document | None: #this means the function will eit
         metadata["line_count"] = result["line_count"]
     if "detections" in result:       # IMAGE
         metadata["ocr_detections"] = result["detections"]
+    if "image_embedding" in result and result["image_embedding"] is not None:
+        metadata["image_embedding"] = result["image_embedding"]
+    if "caption" in result:
+        metadata["caption"] = result["caption"]
 
     doc = Document(
         doc_id=str(uuid.uuid4()),

@@ -30,7 +30,7 @@ ATTACK_TYPE_KEYWORDS: dict[str, list[str]] = {
         "fired upon", "fired on",
         "stormed", "breached", "assault",
         "armed militants", "armed attackers",
-        "attacked", "gunfight",
+        "attacked", "gunfight", "encounter",
     ],
     "Kidnapping": [
         "kidnap", "kidnapping", "abducted", "abduction",

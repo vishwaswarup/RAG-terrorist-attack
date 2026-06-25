@@ -58,49 +58,80 @@ from storage.incident_repository import save_incident
 initialize_database()
 
 
-def process_document(document: Document) -> list[Incident]:
+from typing import List, Union
+from models.image_asset import ImageAsset
+
+def process_document(document: Document) -> List[Union[Incident, ImageAsset]]:
     """
     Extracts multi-incidents from a Document using clustering.
-    Saves each extracted Incident to the database.
+    If the document is an image, it also extracts and includes an ImageAsset.
+    Saves each extracted Incident to the database (Note: ImageAssets are saved via the UI/ChromaManager directly).
     """
+    results = []
+    
+    if document.source_type == "IMAGE":
+        asset = ImageAsset(
+            asset_id=f"{document.doc_id}_image",
+            filename=document.title,
+            ocr_text=document.raw_text,
+            caption=document.metadata.get("caption", ""),
+            source_document_id=document.doc_id,
+            image_embedding=document.metadata.get("image_embedding", []),
+            metadata={"source": "user_upload", "extractor": document.metadata.get("extractor", "")}
+        )
+        results.append(asset)
+
     incidents = build_multi_incidents(document)
     for incident in incidents:
         save_incident(incident)
-    return incidents
+        results.append(incident)
+        
+    return results
 
 
-def print_incident(incident: Incident) -> None:
-    """Print a formatted incident report."""
+def print_incident(incident: Union[Incident, ImageAsset]) -> None:
+    """Print a formatted incident or image asset report."""
 
     print()
     print("=" * 60)
-    print("  EXTRACTED INCIDENT")
-    print("=" * 60)
-    print()
-    print(f"  Incident ID       : {incident.incident_id}")
-    print(f"  Source Document    : {incident.source_document_id}")
-    print()
-    print(f"  Date              : {incident.date or '(not found)'}")
-    print(f"  Country           : {incident.country or '(not found)'}")
-    print(f"  State             : {incident.state or '(not found)'}")
-    print(f"  City              : {incident.city or '(not found)'}")
-    print(f"  Loc. Confidence   : {incident.location_confidence:.2f}")
-    print()
-    print(f"  Attack Types      : {incident.attack_types or '(none detected)'}")
-    print(f"  Weapon Types      : {incident.weapon_types or '(none detected)'}")
-    print(f"  Target Types      : {incident.target_types or '(none detected)'}")
-    print()
-    print(f"  Responsible Groups: {incident.responsible_groups or '(none detected)'}")
-    print(f"  Target Orgs       : {incident.target_organizations or '(none detected)'}")
-    print()
-    print(f"  Killed            : {incident.killed}")
-    print(f"  Injured           : {incident.injured}")
-    print()
-    print(f"  Summary           : {incident.summary[:200]}")
-    if len(incident.summary) > 200:
-        print(f"                      ... (truncated)")
-    print()
-    print(f"  Retrieval Text    : {incident.retrieval_text}")
+    if isinstance(incident, ImageAsset):
+        print("  EXTRACTED IMAGE ASSET")
+        print("=" * 60)
+        print()
+        print(f"  Asset ID          : {incident.asset_id}")
+        print(f"  Source Document   : {incident.source_document_id}")
+        print()
+        print(f"  Filename          : {incident.filename}")
+        print(f"  OCR Text          : {incident.ocr_text[:200]}")
+        print(f"  Caption           : {incident.caption}")
+    else:
+        print("  EXTRACTED INCIDENT")
+        print("=" * 60)
+        print()
+        print(f"  Incident ID       : {incident.incident_id}")
+        print(f"  Source Document    : {incident.source_document_id}")
+        print()
+        print(f"  Date              : {incident.date or '(not found)'}")
+        print(f"  Country           : {incident.country or '(not found)'}")
+        print(f"  State             : {incident.state or '(not found)'}")
+        print(f"  City              : {incident.city or '(not found)'}")
+        print(f"  Loc. Confidence   : {incident.location_confidence:.2f}")
+        print()
+        print(f"  Attack Types      : {incident.attack_types or '(none detected)'}")
+        print(f"  Weapon Types      : {incident.weapon_types or '(none detected)'}")
+        print(f"  Target Types      : {incident.target_types or '(none detected)'}")
+        print()
+        print(f"  Responsible Groups: {incident.responsible_groups or '(none detected)'}")
+        print(f"  Target Orgs       : {incident.target_organizations or '(none detected)'}")
+        print()
+        print(f"  Killed            : {incident.killed}")
+        print(f"  Injured           : {incident.injured}")
+        print()
+        print(f"  Summary           : {incident.summary[:200]}")
+        if len(incident.summary) > 200:
+            print(f"                      ... (truncated)")
+        print()
+        print(f"  Retrieval Text    : {incident.retrieval_text}")
     print()
     print("=" * 60)
     print()
@@ -133,10 +164,10 @@ def main():
 
     incidents = process_document(document)
     
-    print(f"  [Phase 2] Found {len(incidents)} distinct incident(s).")
+    print(f"  [Phase 2] Found {len(incidents)} distinct result(s).")
 
     for idx, inc in enumerate(incidents, start=1):
-        print(f"\n  --- Incident {idx} of {len(incidents)} ---")
+        print(f"\n  --- Result {idx} of {len(incidents)} ---")
         print_incident(inc)
 
 

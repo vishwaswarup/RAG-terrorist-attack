@@ -33,7 +33,7 @@ _TENS = {
     "sixty": 60, "seventy": 70, "eighty": 80, "ninety": 90,
 }
 
-_FUZZY = {"dozens": 24, "scores": 40, "several": 3}
+_FUZZY = {"dozens": 24, "scores": 40, "several": 3, "both": 2}
 
 # Build a single regex that matches number words (e.g. "forty five", "nineteen", "seven")
 _ALL_WORDS = list(_ONES.keys()) + list(_TENS.keys()) + list(_FUZZY.keys())
