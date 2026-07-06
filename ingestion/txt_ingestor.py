@@ -20,6 +20,8 @@ def extract_txt(file_path: str) -> dict:
         extractor  – name of the extractor used
     """
 
+    import time
+    t0 = time.perf_counter()
     # --- 1. Validate path ---------------------------------------------------
     if not os.path.isfile(file_path):
         raise FileNotFoundError(f"File not found: {file_path}")
@@ -33,6 +35,9 @@ def extract_txt(file_path: str) -> dict:
             contents = f.read()
     except Exception as e:
         raise RuntimeError(f"Could not read file: {e}")
+
+    elapsed = time.perf_counter() - t0
+    print(f"[Timing] TXT Ingestion completed in {elapsed:.4f}s")
 
     return {
         "text": contents,

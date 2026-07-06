@@ -345,6 +345,9 @@ class RetrievalEngine:
         ChromaDB candidates, then ranks by semantic similarity + metadata bonus.
         Falls back to pure semantic search if no filters match or filtered results are sparse.
         """
+        import time
+        t0 = time.perf_counter()
+        
         if not query.strip():
             return []
         
@@ -462,6 +465,9 @@ class RetrievalEngine:
             final_score = score + metadata_bonus + doc_keyword_bonus + attack_type_bonus
             candidates.append(RetrievalResult(payload=obj, score=final_score))
 
+        elapsed = time.perf_counter() - t0
+        print(f"[Timing] Retrieval Engine (search excluding LLM) completed in {elapsed:.4f}s")
+        
         if not candidates:
             return []
             

@@ -34,6 +34,9 @@ class LLMClient:
             "num_ctx": 4096
         }
         
+        import time
+        t0 = time.perf_counter()
+        
         try:
             response = ollama.chat(
                 model=self.model_name, 
@@ -48,6 +51,9 @@ class LLMClient:
                 last_idx = max(content.rfind(e) for e in valid_enders)
                 if last_idx != -1:
                     content = content[:last_idx+1].strip()
+            
+            elapsed = time.perf_counter() - t0
+            print(f"[Timing] Ollama Inference ({self.model_name}) completed in {elapsed:.4f}s")
             
             logger.debug(f"Generated response length: {len(content)} chars")
             return content

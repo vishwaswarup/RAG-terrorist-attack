@@ -22,6 +22,8 @@ def extract_docx(file_path: str) -> dict:
         extractor       – name of the extractor used
     """
 
+    import time
+    t0 = time.perf_counter()
     # --- 1. Validate path ---------------------------------------------------
     if not os.path.isfile(file_path):
         raise FileNotFoundError(f"File not found: {file_path}")
@@ -34,6 +36,9 @@ def extract_docx(file_path: str) -> dict:
     # --- 2. Read paragraphs -------------------------------------------------
     paragraphs = doc.paragraphs
     full_text = "\n".join(para.text for para in paragraphs)
+
+    elapsed = time.perf_counter() - t0
+    print(f"[Timing] DOCX Ingestion completed in {elapsed:.4f}s")
 
     return {
         "text": full_text,

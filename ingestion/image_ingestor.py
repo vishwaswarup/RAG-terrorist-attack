@@ -22,6 +22,8 @@ def extract_image_text(file_path: str) -> dict:
         image_embedding – the OpenCLIP embedding vector
         caption         – the BLIP generated caption
     """
+    import time
+    t0 = time.perf_counter()
     if not os.path.isfile(file_path):
         raise FileNotFoundError(f"File not found: {file_path}")
 
@@ -29,24 +31,32 @@ def extract_image_text(file_path: str) -> dict:
     try:
         from paddleocr import PaddleOCR
         # use_angle_cls=True helps with rotated text
-        reader = PaddleOCR(use_angle_cls=True, lang='en', use_gpu=False, show_log=False)
+        reader = PaddleOCR(use_angle_cls=True, lang='en')
     except Exception as e:
         raise RuntimeError(f"Could not initialise PaddleOCR: {e}")
 
     # --- 2. Run OCR ---
     try:
-        results = reader.ocr(file_path, cls=True)
+        results = reader.ocr(file_path)
     except Exception as e:
         raise RuntimeError(f"OCR failed: {e}")
 
     combined_text = ""
     detections = 0
-    if results and len(results) > 0 and results[0]:
-        lines = results[0]
-        # result format: [[[[x,y], [x,y], [x,y], [x,y]], ('text', confidence)], ...]
-        texts = [line[1][0] for line in lines if len(line) >= 2 and len(line[1]) >= 1]
-        combined_text = " ".join(texts)
-        detections = len(texts)
+    
+    if results and len(results) > 0:
+        # PaddleOCR v6 / PaddleX can return a list of dictionaries
+        if isinstance(results[0], dict) and 'rec_texts' in results[0]:
+            texts = results[0]['rec_texts']
+            combined_text = " ".join(texts)
+            detections = len(texts)
+        # Fallback for standard older PaddleOCR format
+        elif isinstance(results[0], list):
+            lines = results[0]
+            # result format: [[[[x,y], [x,y], [x,y], [x,y]], ('text', confidence)], ...]
+            texts = [line[1][0] for line in lines if isinstance(line, (list, tuple)) and len(line) >= 2 and isinstance(line[1], (list, tuple)) and len(line[1]) >= 1]
+            combined_text = " ".join(texts)
+            detections = len(texts)
 
     # Convert to PIL Image once for visual models
     try:
@@ -76,6 +86,9 @@ def extract_image_text(file_path: str) -> dict:
     except Exception as e:
         import logging
         logging.error(f"Failed to generate image caption for {file_path}: {e}")
+
+    elapsed = time.perf_counter() - t0
+    print(f"[Timing] Image OCR & Multimodal Ingestion completed in {elapsed:.4f}s")
 
     return {
         "text": combined_text,

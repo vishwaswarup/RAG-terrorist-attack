@@ -32,6 +32,8 @@ def extract_scanned_pdf(file_path: str) -> dict:
         extractor  – name of the extractor used
     """
 
+    import time
+    t0 = time.perf_counter()
     # --- 1. Validate path ---------------------------------------------------
     if not os.path.isfile(file_path):
         raise FileNotFoundError(f"File not found: {file_path}")
@@ -79,6 +81,9 @@ def extract_scanned_pdf(file_path: str) -> dict:
         all_page_texts.append(page_text)
 
     full_text = "\n".join(all_page_texts)
+
+    elapsed = time.perf_counter() - t0
+    print(f"[Timing] Scanned PDF OCR Ingestion completed in {elapsed:.4f}s")
 
     return {
         "text": full_text,

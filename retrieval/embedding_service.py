@@ -78,24 +78,41 @@ class EmbeddingService:
         """
         Embeds a batch of queries using the BGE text model.
         """
+        import time
+        t0 = time.perf_counter()
+        
         if "bge" in self.text_model_name.lower():
             prefix = "Represent this sentence for searching relevant passages: "
             queries = [prefix + q for q in queries]
         
         embeddings = self.text_model.encode(queries, batch_size=32, show_progress_bar=False, normalize_embeddings=True)
+        
+        elapsed = time.perf_counter() - t0
+        print(f"[Timing] Embedding Generation (queries, {len(queries)} items) completed in {elapsed:.4f}s")
+        
         return embeddings.tolist()
 
     def embed_documents(self, documents: list[str]) -> list[list[float]]:
         """
         Embeds a batch of documents using the BGE text model.
         """
+        import time
+        t0 = time.perf_counter()
+        
         embeddings = self.text_model.encode(documents, batch_size=64, show_progress_bar=False, normalize_embeddings=True)
+        
+        elapsed = time.perf_counter() - t0
+        print(f"[Timing] Embedding Generation (documents, {len(documents)} items) completed in {elapsed:.4f}s")
+        
         return embeddings.tolist()
         
     def embed_images(self, images: list) -> list[list[float]]:
         """
         Embeds a batch of PIL Images using OpenCLIP.
         """
+        import time
+        t0 = time.perf_counter()
+        
         if self.clip_model is None:
             raise RuntimeError("OpenCLIP model is not initialized.")
             
@@ -105,6 +122,10 @@ class EmbeddingService:
             image_tensors = torch.stack([self.clip_preprocess(img) for img in images]).to(self.device)
             image_features = self.clip_model.encode_image(image_tensors)
             image_features /= image_features.norm(dim=-1, keepdim=True)
+            
+            elapsed = time.perf_counter() - t0
+            print(f"[Timing] Embedding Generation (images, {len(images)} items) completed in {elapsed:.4f}s")
+            
             return image_features.cpu().tolist()
             
     def embed_text_for_image_search(self, queries: list[str]) -> list[list[float]]:
