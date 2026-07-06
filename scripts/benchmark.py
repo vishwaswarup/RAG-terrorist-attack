@@ -9,7 +9,7 @@ import os
 import gc
 from PIL import Image, ImageDraw, ImageFont
 
-# Import DRDO components
+# Import project components
 from ingestion.txt_ingestor import extract_txt
 from ingestion.image_ingestor import extract_image_text
 from ingestion.scanned_pdf_ingestor import extract_scanned_pdf
@@ -143,7 +143,7 @@ def run_benchmark(iterations=3):
     
     # Print Table
     print("\n" + "="*60)
-    print(f"{'DRDO PHASE 1 PIPELINE BENCHMARK':^60}")
+    print(f"{'PIPELINE BENCHMARK':^60}")
     print("="*60)
     print(f"{'Metric':<40} | {'Value':<15}")
     print("-" * 60)

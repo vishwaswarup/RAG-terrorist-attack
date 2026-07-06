@@ -27,7 +27,7 @@ Usage
 
 Then enter a file path when prompted, for example:
 
-    test_files/DRDO Offline Multimodal Intelligence Analysis System.pdf
+    test_files/Offline Multimodal Intelligence Analysis System.pdf
 """
 
 import os
@@ -183,7 +183,7 @@ def print_summary(doc: Document) -> None:
 def main():
     print()
     print("=" * 60)
-    print("  DRDO Phase 2 — Unified Ingestion Pipeline")
+    print("  Unified Ingestion Pipeline")
     print("=" * 60)
     print()
 

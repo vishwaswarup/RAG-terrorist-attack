@@ -1,4 +1,4 @@
-# DRDO Offline Multimodal Intelligence Analysis System
+# Offline Multimodal RAG Intelligence Analysis System
 
 > **Status:** Core Pipeline & UI Integrated  
 > **Objective:** A fully offline, end-to-end multimodal intelligence analysis system integrating document ingestion, LLM-powered event extraction, hybrid vector search, and a visual dashboard.
@@ -20,7 +20,7 @@ Key Capabilities:
 ## Project Structure
 
 ```text
-drdo_phase1/
+intelligence_system/
 │
 ├── ingestion/       ← Standardized document ingestors (PDF, DOCX, TXT, Image OCR)
 ├── extraction/      ← LLM-powered entity extraction and event clustering
@@ -45,7 +45,7 @@ drdo_phase1/
 ### 1. Create a virtual environment
 
 ```bash
-cd drdo_phase1
+cd intelligence_system
 python3 -m venv .venv
 ```
 

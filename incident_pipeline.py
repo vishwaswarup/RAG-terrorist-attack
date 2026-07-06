@@ -140,7 +140,7 @@ def print_incident(incident: Union[Incident, ImageAsset]) -> None:
 def main():
     print()
     print("=" * 60)
-    print("  DRDO Phase 2 — Incident Extraction Pipeline")
+    print("  Incident Extraction Pipeline")
     print("=" * 60)
     print()
 

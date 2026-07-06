@@ -3,7 +3,7 @@ GTD Ingestion Script
 ====================
 
 Parses the raw Global Terrorism Database (GTD) CSV into the standard
-DRDO Incident schema, generating retrieval text block formatting,
+Standard Incident schema, generating retrieval text block formatting,
 and outputs 4 JSON datasets.
 """
 

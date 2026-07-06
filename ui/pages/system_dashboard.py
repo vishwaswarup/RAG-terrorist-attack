@@ -6,7 +6,7 @@ import platform
 st.set_page_config(page_title="System Dashboard", page_icon="⚙️", layout="wide")
 
 st.title("⚙️ System Status Dashboard")
-st.markdown("Monitor the offline status of DRDO Multimodal Intelligence Analysis System.")
+st.markdown("Monitor the offline status of the Multimodal Intelligence Analysis System.")
 
 llm_model_name = os.environ.get("LLM_MODEL", "qwen3:8b")
 
