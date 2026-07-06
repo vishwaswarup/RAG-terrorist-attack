@@ -1,21 +1,19 @@
-# DRDO Phase 1A — Library Exploration & Data Ingestion Research
+# DRDO Offline Multimodal Intelligence Analysis System
 
-> **Status:** Phase 1A — Experimentation Sandbox  
-> **Objective:** Learn how different document ingestion libraries behave *before* integrating them into a larger system.
+> **Status:** Core Pipeline & UI Integrated  
+> **Objective:** A fully offline, end-to-end multimodal intelligence analysis system integrating document ingestion, LLM-powered event extraction, hybrid vector search, and a visual dashboard.
 
 ---
 
 ## Project Purpose
 
-This project is an **experimentation environment** for Phase 1 of an Offline Multimodal Intelligence Analysis System (DRDO-style).
+This project is an advanced **intelligence analysis environment** capable of parsing multimodal documents (PDFs, images, raw text), extracting structured incident records using Local LLMs, indexing them into an offline vector database, and providing a unified RAG (Retrieval-Augmented Generation) search interface.
 
-It is intentionally **not** a production pipeline. There are no vector databases, no embeddings, no LLM integrations, and no RAG architecture here. The sole goal is to:
-
-1. **Understand** how each library reads and processes different file formats.
-2. **Observe** the raw outputs (text, metadata, OCR detections) first-hand.
-3. **Build intuition** about edge cases, limitations, and failure modes.
-
-Once this exploration phase is complete, the learnings will feed into the design of the real ingestion pipeline.
+Key Capabilities:
+1. **Multimodal Ingestion**: Processes PDFs, DOCX, TXT, and runs OCR and vision models on images.
+2. **LLM Extraction**: Automatically structures raw text into `Incident` objects (locations, dates, casualties, groups, etc.).
+3. **Hybrid Search**: Combines strict metadata filtering with dense semantic vector search via ChromaDB.
+4. **Interactive Dashboard**: A Streamlit UI for querying the intelligence database, analyzing datasets, and uploading new documents.
 
 ---
 
@@ -24,19 +22,18 @@ Once this exploration phase is complete, the learnings will feed into the design
 ```text
 drdo_phase1/
 │
-├── test_files/                    ← Drop sample PDFs, DOCX, TXT, images here
+├── ingestion/       ← Standardized document ingestors (PDF, DOCX, TXT, Image OCR)
+├── extraction/      ← LLM-powered entity extraction and event clustering
+├── models/          ← Core data schemas (Document, Incident, ImageAsset)
+├── rag/             ← Retrieval-Augmented Generation & LLM integrations
+├── retrieval/       ← Hybrid vector search engine (ChromaDB & embeddings)
+├── storage/         ← Persistent local vector database & SQLite
+├── ui/              ← Streamlit Dashboard interface
+├── scripts/         ← Evaluation, benchmarking, and diagnostic tools
+├── test_files/      ← Sample multimodal test files for ingestion
 │
-├── experiments/
-│   ├── test_file_classifier.py    ← Experiment 1: MIME-based file classification
-│   ├── test_pdf.py                ← Experiment 2: PDF text extraction (PyMuPDF)
-│   ├── test_docx.py               ← Experiment 3: DOCX paragraph extraction
-│   ├── test_txt.py                ← Experiment 4: Plain text reading
-│   ├── test_image.py              ← Experiment 5: Image OCR (EasyOCR)
-│   └── test_scanned_pdf.py        ← Experiment 6: Scanned PDF → images → OCR
-│
-├── models/
-│   └── document.py                ← Prototype Document dataclass
-│
+├── pipeline.py          ← CLI entry point for testing document ingestion
+├── incident_pipeline.py ← CLI entry point for testing incident extraction
 ├── requirements.txt
 └── README.md
 ```
@@ -49,27 +46,18 @@ drdo_phase1/
 
 ```bash
 cd drdo_phase1
-python -m venv .venv
+python3 -m venv .venv
 ```
 
 ### 2. Activate the virtual environment
 
 **macOS / Linux:**
-
 ```bash
 source .venv/bin/activate
 ```
-
-**Windows (PowerShell):**
-
-```powershell
-.venv\Scripts\Activate.ps1
-```
-
-**Windows (CMD):**
-
+**Windows:**
 ```cmd
-.venv\Scripts\activate.bat
+.venv\Scripts\activate
 ```
 
 ### 3. Install dependencies
@@ -78,138 +66,66 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 4. System dependency — poppler (for pdf2image)
+### 4. System Dependencies
 
-`pdf2image` requires the **poppler** command-line tools to convert PDF pages into images.
-
-**macOS:**
-
-```bash
-brew install poppler
-```
-
-**Ubuntu / Debian:**
-
-```bash
-sudo apt-get install poppler-utils
-```
-
-**Windows:**
-
-Download poppler from https://github.com/oschwartz10612/poppler-windows/releases and add the `bin/` folder to your system PATH.
+**Poppler** is required by `pdf2image` to handle scanned PDFs:
+- **macOS:** `brew install poppler`
+- **Ubuntu:** `sudo apt-get install poppler-utils`
 
 ---
 
-## Running Experiments
+## Usage
 
-Each experiment is a standalone script. Run them from the project root:
-
-### Experiment 1 — File Classification
-
-```bash
-python experiments/test_file_classifier.py
-```
-
-Classifies any file by its actual binary content (magic bytes), not the extension.  
-Categories: `PDF`, `DOCX`, `TXT`, `IMAGE`, `UNKNOWN`.
-
-### Experiment 2 — PDF Extraction
+### 1. The Interactive Dashboard (Recommended)
+The primary way to interact with the intelligence system is through the Streamlit UI.
 
 ```bash
-python experiments/test_pdf.py
+streamlit run ui/app.py
 ```
+This launches a local web application where you can:
+- Explore the Intelligence Database.
+- Upload and analyze new multimodal documents.
+- Run hybrid queries via the unified RAG interface.
 
-Opens a PDF with PyMuPDF, prints metadata and extracts text page-by-page.
-
-### Experiment 3 — DOCX Extraction
+### 2. CLI Ingestion Testing
+To test the low-level ingestion of a single file (without extracting incidents):
 
 ```bash
-python experiments/test_docx.py
+python pipeline.py
 ```
+*Prompts for a file path (e.g., `test_files/pulmawa_mixed.pdf`) and prints the extracted text and metadata.*
 
-Reads all paragraphs from a Word document using python-docx.
-
-### Experiment 4 — TXT Extraction
+### 3. CLI Extraction Testing
+To test the LLM event clustering on a single file:
 
 ```bash
-python experiments/test_txt.py
+python incident_pipeline.py
 ```
+*Prompts for a file path, ingests it, runs the LLM extractor, and prints the structured `Incident` records.*
 
-Reads a plain text file and prints line/character counts.
-
-### Experiment 5 — Image OCR
+### 4. Diagnostics & Benchmarking
+All standalone metric and evaluation scripts have been moved to the `scripts/` directory. For example, to test retrieval accuracy:
 
 ```bash
-python experiments/test_image.py
+python scripts/diagnostic_retrieval.py
 ```
-
-Runs EasyOCR on an image and prints detected text, confidence scores, and bounding boxes.  
-*(First run will download EasyOCR model weights — this is expected.)*
-
-### Experiment 6 — Scanned PDF OCR
-
-```bash
-python experiments/test_scanned_pdf.py
-```
-
-Converts each page of a scanned PDF to an image, then runs EasyOCR on every page.  
-Requires poppler (see Installation above).
-
-### Document Dataclass Demo
-
-```bash
-python models/document.py
-```
-
-Shows how different file types can be converted into a single unified `Document` object.
 
 ---
 
-## Libraries Used
-
-| Library        | Import         | Purpose                                        |
-| -------------- | -------------- | ---------------------------------------------- |
-| python-magic   | `magic`        | Detect file type from binary content            |
-| PyMuPDF        | `fitz`         | Read and extract text from PDF files            |
-| python-docx    | `docx`         | Read paragraphs from DOCX files                 |
-| EasyOCR        | `easyocr`      | Optical Character Recognition on images          |
-| Pillow         | `PIL`          | Image handling (used by EasyOCR and pdf2image)   |
-| pdf2image      | `pdf2image`    | Convert PDF pages to images (requires poppler)   |
-
----
-
-## Future Architecture
-
-Eventually, this system will evolve into a full offline intelligence-analysis pipeline:
+## Architecture Flow
 
 ```text
-Input File
+Input File (PDF, Image, TXT)
     ↓
-File Classifier          ← Experiment 1
+Ingestion Pipeline (PyMuPDF, PaddleOCR, OpenCLIP, BLIP)
     ↓
-Format-Specific Loader   ← Experiments 2–6
+Document Object
     ↓
-Text Extraction
+LLM Extraction Pipeline (Event Clustering)
     ↓
-Document Object          ← models/document.py
+Incident Records & Image Assets
     ↓
-Incident Extraction      ← (future phase)
+ChromaDB (Dense Vector Search + Metadata Filters)
     ↓
-Incident Records
-    ↓
-Embeddings               ← (future phase)
-    ↓
-Retrieval                ← (future phase)
+RAG Engine & Streamlit Dashboard
 ```
-
-**This project intentionally stops at the Document Object stage.**  
-Everything below that line (incident extraction, embeddings, retrieval) is for later phases.
-
----
-
-## Notes
-
-- Place your sample test files in the `test_files/` directory.
-- The `temp_pages/` folder is created automatically by Experiment 6 and can be deleted safely.
-- All experiments use `gpu=False` for EasyOCR to ensure they run on any machine.
-- Each script handles errors gracefully and prints helpful messages on failure.
