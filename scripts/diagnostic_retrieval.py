@@ -1,11 +1,16 @@
 """Diagnostic: Run benchmark queries and show raw retrieval results."""
+import os
+import sys
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
+
 import os, sys
 from dotenv import load_dotenv
 load_dotenv()
 
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
+
 
 from retrieval.retrieval_engine import RetrievalEngine
 from models.image_asset import ImageAsset

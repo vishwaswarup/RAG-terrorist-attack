@@ -1,3 +1,4 @@
+# === Ingestion ===
 python-magic
 PyMuPDF
 python-docx
@@ -5,10 +6,27 @@ paddlepaddle>=2.6.1
 paddleocr>=2.7.3
 Pillow
 pdf2image
+easyocr
+
+# === Extraction (NLP) ===
 spacy
 dateparser
+
+# === Retrieval & Embeddings ===
 sentence-transformers
 chromadb
-streamlit
 open_clip_torch
-Pillowpython-dotenv
+torch
+
+# === RAG / LLM ===
+ollama
+
+# === UI ===
+streamlit
+psutil
+
+# === Data Processing ===
+pandas
+
+# === Utilities ===
+python-dotenv
