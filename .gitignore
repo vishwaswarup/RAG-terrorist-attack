@@ -1,7 +1,6 @@
 storage/*.json
 storage/*.csv
-storage/vector_db/
-*.db
+
 __pycache__/
 .venv/
 temp_uploads/
